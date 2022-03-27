@@ -1,0 +1,31 @@
+{
+  "name": "formhunter",
+  "version": "1.0.0",
+  "description": "Um crawler para busca de formulário em sites.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cleisonsantos/formhunter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cleisonsantos/formhunter/issues"
+  },
+  "homepage": "https://github.com/cleisonsantos/formhunter#readme",
+  "dependencies": {
+    "crawler": "^1.3.0",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.3",
+    "puppeteer": "^13.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
