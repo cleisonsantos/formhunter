@@ -1,24 +1,5 @@
 const fs = require('fs');
-const Crawler = require('crawler');
 const puppeteer = require('puppeteer');
-
-const fetch = async (url) => {
-    const crawler = new Crawler({
-        maxConnections: 10,
-        callback: async (error, res, done) => {
-            if (error) {
-                console.log(error);
-            }
-            const form = res.$('form');
-            if (form.length) {
-                const json = await generateFormJson(form)
-                await saveJsonFile(res.client._host, json)
-            }
-            done();
-        }
-    })
-    return await crawler.queue(url);
-}
 
 const generateFormJson = async (form) => {
     const formSelector = `[name = "${form.attr().name}"]`;
@@ -48,22 +29,25 @@ const searchForm = async () => {
 }
 
 const accessWebsite = async (url) => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     await page.goto(url);
-    const form = await page.$('form', handleForm(e));
-    return formFields;
-}
-
-const handleForm = async (e) => {
-    let form = document.querySelector('form').elements;
-    const elementsList = [...form].filter((e) => {
-        return e.attributes.type !== 'hidden'
-    })
-    return elementsList;
+    const form = await page.evaluate(() => {
+        let form = document.querySelector('form').elements;
+        const elementsList = [...form].filter(element => element.type !== 'hidden');
+        const formFields = elementsList.map((e) => {
+            return {
+                type: e.type,
+                labelName: e.placeholder,
+                name: e.name,
+                selector: `[name = "${e.name}"]`
+            }
+        })
+        console.log(formFields);
+        return formFields;
+    });
 }
 
 module.exports = {
-    fetch,
     accessWebsite
 }
